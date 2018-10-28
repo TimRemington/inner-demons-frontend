@@ -100,9 +100,9 @@ function setUser (userData) {
   userHP.innerHTML += userData.hp;
   userGold.innerHTML += userData.gold;
   userPasses.innerHTML += userData.passes;
-}
+} // set the data in the user bio card
 
-function makeGoalCard(data) {
+function makeGoalCard(data) { //make the cards in the dropdown for goals
   data.forEach(x => {
     let item = goalsDropdown.appendChild(makeDiv(['card', 'card-body']))
     let row1 = item.appendChild(makeDiv(['row']));
@@ -130,7 +130,7 @@ function makeWeaponsCard(data) {
     <p><strong>Attack: </strong>${x.attack}</p>
     <p><strong>Chaos: </strong>${x.chaos}</p>`;
   });
-}
+} //make the cards in the dropdown for weapons
 
 function makeMonstersCard(data) {
   data.forEach(x => {
@@ -144,14 +144,14 @@ function makeMonstersCard(data) {
     <p><strong>Attack: </strong>${x.attack}</p>
     <p><strong>HP: </strong>${x.hp}</p>`;
   });
-}
+} //make the cards in the dropdown for monsters
 
 function makeImg(src) {
   let image = document.createElement('img');
   image.classList.add('weaponImg');
   image.setAttribute('src', src);
   return image;
-}
+}  // make an image for the weapons and monsters dropdowns
 
 function makeDiv(cl) {
   let div = document.createElement('div');
@@ -159,7 +159,7 @@ function makeDiv(cl) {
     div.classList.add(x);
   });
   return div;
-}
+} // make a div with a given class list array
 
 function makeButton(type, id) {
   let button = document.createElement('button');
@@ -169,4 +169,4 @@ function makeButton(type, id) {
   button.classList.add('goalBut');
   button.innerText = type.toUpperCase();
   return button;
-}
+} // make a button with given type and id
