@@ -24,7 +24,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
           description: 'The look that hurts the most.',
           attack: 2,
           chaos: 1,
-          image: 'https://placekitten.com/50/50'
+          image: 'https://placekitten.com/150/150'
         },
         {
           id: 2,
@@ -32,7 +32,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
           description: 'Just a shoe',
           attack: 2,
           chaos: 1,
-          image: 'https://placekitten.com/50/50'
+          image: 'https://placekitten.com/150/150'
         },
         {
           id: 3,
@@ -40,7 +40,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
           description: 'Your right hand curled into a ball.  Dude, find a new weapon.',
           attack: 2,
           chaos: 1,
-          image: 'https://placekitten.com/50/50'
+          image: 'https://placekitten.com/150/150'
         }]
 
   makeGoalCard(goalsData);
@@ -68,8 +68,11 @@ function makeGoalCard(data) {
 function makeWeaponsCard(data) {
   data.forEach(x => {
     let item = weaponsDropdown.appendChild(makeDiv(['card', 'card-body']));
-    item.appendChild(makeImg(x.image))
-    item.innerHTML += `<strong>${x.name}</strong>
+    let row1 = item.appendChild(makeDiv(['row']));
+    let col1 = row1.appendChild(makeDiv(['col']));
+    col1.appendChild(makeImg(x.image));
+    let col2 = row1.appendChild(makeDiv(['col']));
+    col2.innerHTML += `<strong>${x.name}</strong>
     <p>${x.description}</p>
     <p><strong>Attack: </strong>${x.attack}</p>
     <p><strong>Chaos: </strong>${x.chaos}</p>`;
