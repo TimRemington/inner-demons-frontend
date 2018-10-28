@@ -10,6 +10,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
   const userHP = document.querySelector('#userHP');
   const userPasses = document.querySelector('#userPasses');
   const userGold = document.querySelector('#userGold');
+  const userImg = document.querySelector('#userImg');
 
   const userData = {
           id: 1,
@@ -20,22 +21,59 @@ document.addEventListener(`DOMContentLoaded`, () => {
           xp: 0,
           points_toward_pass: 0,
           passes: 0,
-          image: ''
+          image: 'https://placekitten.com/200/200',
+          monsters: [1,2]
         }
   const goalsData = [{
       id: 1,
       name: 'Lose Weight',
-      xp: 200
+      xp: 200,
+      tasks: [{
+          id: 1,
+          name: 'Work out every day',
+          description: 'Go to the gym and do things.',
+          gold: 10
+        },
+        {
+          id: 2,
+          name: 'Diet',
+          description: 'Stick to your diet for the day.',
+          gold: 10
+        }]
     },
     {
       id: 2,
       name: 'Learn to Play Guitar',
-      xp: 100
+      xp: 100,
+      tasks: [{
+          id: 3,
+          name: 'Practice',
+          description: 'Practice your instrument.',
+          gold: 10
+        },
+        {
+          id: 4,
+          name: 'Learn Something New',
+          description: 'Learn a thing.',
+          gold: 10
+        }]
     },
     {
       id: 3,
       name: 'Learn a Language',
-      xp: 100
+      xp: 100,
+      tasks: [{
+          id: 5,
+          name: 'Practice',
+          description: 'Find 20 minutes and practice.',
+          gold: 10
+        },
+        {
+          id: 6,
+          name: 'Learn something new',
+          description: 'Learn a new word or phrase.',
+          gold: 10
+        }]
     }
   ]
   const weaponsData = [{
@@ -100,6 +138,8 @@ function setUser (userData) {  // set the data in the user bio card
   userHP.innerHTML += userData.hp;
   userGold.innerHTML += userData.gold;
   userPasses.innerHTML += userData.passes;
+  userMonsters.innerHTML += userData.monsters.length;
+  userImg.setAttribute('src', userData.image)
 }
 
 function makeGoalCard(data) { //make the cards in the dropdown for goals
@@ -115,6 +155,16 @@ function makeGoalCard(data) { //make the cards in the dropdown for goals
     let col4 = row2.appendChild(makeDiv(['col']));
     col3.innerHTML += `\nExperience: ${x.xp}`
     col4.appendChild(makeButton('remove', x.id));
+    let row3 = item.appendChild(makeDiv(['row']));
+    row3.innerHTML += '<strong>Click tasks to complete them.</strong>'
+    addTasks(x.tasks, row3);
+  });
+}
+
+function addTasks(data, item) {
+  data.forEach(x=> {
+    item.appendChild(makeDiv(['col']))
+    .innerHTML = `<a class = 'btn btn-dark text-white' data-id=${x.gold}>${x.name}</a>`
   });
 }
 
