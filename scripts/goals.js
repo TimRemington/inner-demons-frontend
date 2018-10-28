@@ -59,6 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   makeGoalsCard(goalsData);
 
+  document.addEventListener('click', event => {
+    if (/add/.test(event.target.id)) {
+      addGoal(event.target.id);
+    }
+  })
+
   function makeGoalsCard(data) {
     data.forEach(x => {
       let item = setHere.appendChild(makeDiv(['card'])).appendChild(makeDiv(['card-body', 'text-left']));
@@ -89,6 +95,12 @@ document.addEventListener('DOMContentLoaded', () => {
     button.classList.add('goalBut');
     button.innerText = type.toUpperCase();
     return button;
+  }
+
+  function addGoal(item) {
+    let id = item.replace(/add/, ''); //get id of goal
+    console.log('Added goal number', id);
+    // axios.post(`url/&{user.id}`, {goals: id});
   }
 
 
