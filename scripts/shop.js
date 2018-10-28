@@ -30,7 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   ];
 
-  makeWeaponsCard(weaponsData)
+  makeWeaponsCard(weaponsData);
+
+  document.addEventListener('click', event => {
+    if (/buy/.test(event.target.id)) {
+      buyItem(event.target);
+    }
+  })
 });
 
 function makeWeaponsCard(data) {
@@ -44,7 +50,7 @@ function makeWeaponsCard(data) {
   <p class = 'text-center mx-auto'>Attack: ${x.attack}</p>
   <p class = 'text-center mx-auto'>Chaos: ${x.chaos}</p>
   <p class = 'text-center mx-auto'>Cost: ${x.cost} Gold</p>
-  <a class='btn btn-dark mx-auto text-center text-white' id=$battle{x.id}>BUY</a>`
+  <a class='btn btn-dark mx-auto text-center text-white' id=buy${x.id}>BUY</a>`
   });
 }
 
@@ -61,4 +67,13 @@ function makeImg(src) { // make an image
   image.classList.add('card-img-top');
   image.setAttribute('src', src);
   return image;
+}
+
+function buyItem(item) { // send request to backend
+  let id = parseInt(item.id.replace(/buy/, ''));
+  // axios.patch(`url/${userId}`, {weapon: id});
+  document.getElementById(item.id).innerText = 'BOUGHT'
+  document.getElementById(item.id).id = 'x';
+  item.classList.remove('btn-dark');
+  item.classList.add('btn-primary');
 }
