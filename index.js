@@ -2,6 +2,26 @@ document.addEventListener(`DOMContentLoaded`, () => {
   const goalsDropdown = document.querySelector('#goalsDropdown');
   const weaponsDropdown = document.querySelector('#weaponsDropdown');
   const monstersDropdown = document.querySelector('#monstersDropdown');
+  const userName = document.querySelector('#userName');
+  const userLevel = document.querySelector('#userLevel');
+  const userXP = document.querySelector('#userXP');
+  const userWeapons = document.querySelector('#userWeapons');
+  const userMonsters = document.querySelector('#userMonsters');
+  const userHP = document.querySelector('#userHP');
+  const userPasses = document.querySelector('#userPasses');
+  const userGold = document.querySelector('#userGold');
+
+  const userData = {
+          id: 1,
+          name: 'TimRemingtonSux',
+          level: 1,
+          gold: 10,
+          hp: 10,
+          xp: 0,
+          points_toward_pass: 0,
+          passes: 0,
+          image: ''
+        }
   const goalsData = [{
       id: 1,
       name: 'Lose Weight',
@@ -67,13 +87,20 @@ document.addEventListener(`DOMContentLoaded`, () => {
           image: 'https://placekitten.com/150/150'
         }];
 
-
+  setUser(userData);
   makeGoalCard(goalsData);
   makeWeaponsCard(weaponsData);
   makeMonstersCard(monstersData);
 });
 
-
+function setUser (userData) {
+  userName.innerText += userData.name;
+  userLevel.innerHTML += userData.level;
+  userXP.innerHTML += userData.xp;
+  userHP.innerHTML += userData.hp;
+  userGold.innerHTML += userData.gold;
+  userPasses.innerHTML += userData.passes;
+}
 
 function makeGoalCard(data) {
   data.forEach(x => {

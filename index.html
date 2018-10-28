@@ -11,7 +11,7 @@
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">Inner<i class="fas fa-skull-crossbones"></i>Demons</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -36,44 +36,47 @@
       <img class="mr-3" id='userImg' src="https://placekitten.com/200/200" alt="Generic placeholder image">
       <div class="media-body">
 
-        <h5 class="mt-0">The Dark Lord</h5>
+        <h5 class="mt-0" id='userName'></h5>
         <div class='row'>
-          <div class='col mt-2'><strong>Level: </strong> 1</div>
-          <div class='col'><strong>Weapons: </strong> 1<button id='viewWeapons' class='mx-1 btn btn-dark'>VIEW</button></div>
+          <div class='col' id='userLevel'><strong>Level: </strong></div>
+          <div class='col' id='userWeapons'><strong>Weapons: </strong></div>
         </div>
         <div class='row mt-2'>
-          <div class='col mt-2'><strong>Experience: </strong> 0</div>
-          <div class='col'><strong>Monsters: </strong> 1<button id='viewMonsters' class='mx-1 btn btn-dark'>VIEW</button></div>
+          <div class='col' id='userXP'><strong>Experience: </strong></div>
+          <div class='col' id='userMonsters'><strong>Monsters: </strong></div>
         </div>
-        <div class='row mt-3'>
-          <div class='col'><strong>HP: </strong> 10</div>
+        <div class='row mt-2'>
+          <div class='col' id='userHP'><strong>HP: </strong></div>
         </div>
-        <div class='row mt-3'>
-          <div class='col'><strong>Raid Passes: </strong> 0</div>
+        <div class='row mt-2'>
+          <div class='col' id='userGold'><strong>Gold: </strong></div>
+        </div>
+        <div class='row mt-2'>
+          <div class='col' id='userPasses'><strong>Raid Passes: </strong></div>
         </div>
       </div>
     </div>
   </div>
-  <div class = 'mt-3 ml-5'>
-  <button class="btn btn-dark dropdown-btn" type="button" data-toggle="collapse" data-target="#goalsDropdown" aria-expanded="true" aria-controls="collapseExample">
+  <div class='mt-3 ml-5'>
+    <button class="btn btn-dark dropdown-btn" type="button" data-toggle="collapse" data-target="#goalsDropdown" aria-expanded="true" aria-controls="collapseExample">
     Goals
   </button>
-  <button class="btn btn-dark dropdown-btn" type="button" data-toggle="collapse" data-target="#weaponsDropdown" aria-expanded="false" aria-controls="collapseExample">
+    <button class="btn btn-dark dropdown-btn" type="button" data-toggle="collapse" data-target="#weaponsDropdown" aria-expanded="false" aria-controls="collapseExample">
     Weapons
   </button>
-  <button class="btn btn-dark dropdown-btn" type="button" data-toggle="collapse" data-target="#monstersDropdown" aria-expanded="false" aria-controls="collapseExample">
+    <button class="btn btn-dark dropdown-btn" type="button" data-toggle="collapse" data-target="#monstersDropdown" aria-expanded="false" aria-controls="collapseExample">
     Monsters
   </button>
 
-  <div class="collapse show mt-3" id="goalsDropdown">
-  </div>
+    <div class="collapse show mt-3" id="goalsDropdown">
+    </div>
 
-  <div class="collapse mt-3" id="weaponsDropdown">
-  </div>
+    <div class="collapse mt-3" id="weaponsDropdown">
+    </div>
 
-  <div class="collapse mt-3" id="monstersDropdown">
+    <div class="collapse mt-3" id="monstersDropdown">
+    </div>
   </div>
-</div>
 
 
   <script src='index.js'></script>
