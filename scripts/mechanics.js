@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
   checkDate();
 
   document.addEventListener('click', event => {
-    event.preventDefault();
     if (/and/.test(event.target.id)) {
       completeTask(event.target);
     } else if (/complete/.test(event.target.id)) {

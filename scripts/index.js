@@ -13,18 +13,19 @@ document.addEventListener(`DOMContentLoaded`, () => {
   const userImg = document.querySelector('#userImg');
 
   const userData = {
-          id: 1,
-          name: 'TimRemingtonSux',
-          level: 1,
-          gold: 10,
-          hp: 10,
-          xp: 0,
-          points_toward_pass: 0,
-          passes: 0,
-          image: 'https://placekitten.com/200/200',
-          monsters: [1,2],
-          weapons: [1,2]
-        }
+    id: 1,
+    name: 'TimRemingtonSux',
+    level: 1,
+    gold: 10,
+    hp: 10,
+    xp: 0,
+    points_toward_pass: 0,
+    passes: 0,
+    image: 'https://placekitten.com/200/200',
+    monsters: [1, 2],
+    weapons: [1, 2],
+    goals: [1,2]
+  }
   const goalsData = [{
       id: 1,
       name: 'Lose Weight',
@@ -40,7 +41,8 @@ document.addEventListener(`DOMContentLoaded`, () => {
           name: 'Diet',
           description: 'Stick to your diet for the day.',
           gold: 10
-        }]
+        }
+      ]
     },
     {
       id: 2,
@@ -57,7 +59,8 @@ document.addEventListener(`DOMContentLoaded`, () => {
           name: 'Learn Something New',
           description: 'Learn a thing.',
           gold: 10
-        }]
+        }
+      ]
     },
     {
       id: 3,
@@ -74,65 +77,78 @@ document.addEventListener(`DOMContentLoaded`, () => {
           name: 'Learn something new',
           description: 'Learn a new word or phrase.',
           gold: 10
-        }]
+        }
+      ]
     }
   ]
   const weaponsData = [{
-          id: 1,
-          name: 'Disappointing Glance',
-          description: 'The look that hurts the most.',
-          attack: 2,
-          chaos: 1,
-          image: 'https://placekitten.com/150/150'
-        },
-        {
-          id: 2,
-          name: 'Shoe',
-          description: 'Just a shoe',
-          attack: 2,
-          chaos: 1,
-          image: 'https://placekitten.com/150/150'
-        },
-        {
-          id: 3,
-          name: 'Fist',
-          description: 'Your right hand curled into a ball.  Dude, find a new weapon.',
-          attack: 2,
-          chaos: 1,
-          image: 'https://placekitten.com/150/150'
-        }]
+      id: 1,
+      name: 'Disappointing Glance',
+      description: 'The look that hurts the most.',
+      attack: 2,
+      chaos: 1,
+      image: 'https://placekitten.com/150/150'
+    },
+    {
+      id: 2,
+      name: 'Shoe',
+      description: 'Just a shoe',
+      attack: 2,
+      chaos: 1,
+      image: 'https://placekitten.com/150/150'
+    },
+    {
+      id: 3,
+      name: 'Fist',
+      description: 'Your right hand curled into a ball.  Dude, find a new weapon.',
+      attack: 2,
+      chaos: 1,
+      image: 'https://placekitten.com/150/150'
+    }
+  ]
   const monstersData = [{
-          id: 1,
-          name: 'Matt Damon',
-          description: 'He who brings suffering to the world',
-          attack: 5,
-          hp: 45,
-          image: 'https://placekitten.com/150/150'
-        },
-        {
-          id: 2,
-          name: 'Skeleton Minion',
-          description: 'Spooky horn-playing skeletal monster',
-          attack: 2,
-          hp: 10,
-          image: 'https://placekitten.com/150/150'
-        },
-        {
-          id: 3,
-          name: 'Crab',
-          description: 'The small creature lumbers across the room, pinching at your toes.',
-          attack: 1,
-          hp: 5,
-          image: 'https://placekitten.com/150/150'
-        }];
+      id: 1,
+      name: 'Matt Damon',
+      description: 'He who brings suffering to the world',
+      attack: 5,
+      hp: 45,
+      image: 'https://placekitten.com/150/150'
+    },
+    {
+      id: 2,
+      name: 'Skeleton Minion',
+      description: 'Spooky horn-playing skeletal monster',
+      attack: 2,
+      hp: 10,
+      image: 'https://placekitten.com/150/150'
+    },
+    {
+      id: 3,
+      name: 'Crab',
+      description: 'The small creature lumbers across the room, pinching at your toes.',
+      attack: 1,
+      hp: 5,
+      image: 'https://placekitten.com/150/150'
+    }
+  ];
+
+  let weaponsToUse = weaponsData.filter(x => {
+    return userData.weapons.includes(x.id)
+  });
+  let monstersToUse = monstersData.filter(x=> {
+    return userData.monsters.includes(x.id)
+  });
+  let goalsToUse = goalsData.filter(x=> {
+    return userData.goals.includes(x.id)
+  });
 
   setUser(userData);
-  makeGoalCard(goalsData);
-  makeWeaponsCard(weaponsData);
-  makeMonstersCard(monstersData);
+  makeGoalCard(goalsToUse);
+  makeWeaponsCard(weaponsToUse);
+  makeMonstersCard(monstersToUse);
 });
 
-function setUser (userData) {  // set the data in the user bio card
+function setUser(userData) { // set the data in the user bio card
   userName.innerText += userData.name;
   userLevel.innerHTML += userData.level;
   userXP.innerHTML += userData.xp;
@@ -146,7 +162,7 @@ function setUser (userData) {  // set the data in the user bio card
 
 function makeGoalCard(data) { //make the cards in the dropdown for goals
   data.forEach(x => {
-    let ids = x.tasks.map(y=> y.id);
+    let ids = x.tasks.map(y => y.id);
     let item = goalsDropdown.appendChild(makeDiv(['card', 'card-body']))
     let row1 = item.appendChild(makeDiv(['row']));
     let col1 = row1.appendChild(makeDiv(['col']));
@@ -165,9 +181,9 @@ function makeGoalCard(data) { //make the cards in the dropdown for goals
 }
 
 function addTasks(data, item) {
-  data.forEach(x=> {
+  data.forEach(x => {
     item.appendChild(makeDiv(['col']))
-    .innerHTML = `<a class = 'btn btn-dark text-white' id=${x.id}and${x.gold}>${x.name}</a>`
+      .innerHTML = `<a class = 'btn btn-dark text-white' id=${x.id}and${x.gold}>${x.name}</a>`
   });
 }
 
@@ -199,7 +215,7 @@ function makeMonstersCard(data) { //make the cards in the dropdown for monsters
   });
 }
 
-function makeImg(src) {  // make an image for the weapons and monsters dropdowns
+function makeImg(src) { // make an image for the weapons and monsters dropdowns
   let image = document.createElement('img');
   image.classList.add('weaponImg');
   image.setAttribute('src', src);
@@ -217,10 +233,10 @@ function makeDiv(cl) { // make a div with a given class list array
 function makeButton(type, id, tasks) { // make a button with given type and id
   let button = document.createElement('button');
   if (tasks) {
-  button.id = `${type}${id}tasks${tasks}`
-} else {
-  button.id = `${type}${id}`;
-}
+    button.id = `${type}${id}tasks${tasks}`
+  } else {
+    button.id = `${type}${id}`;
+  }
   button.classList.add('btn');
   button.classList.add('btn-dark');
   button.classList.add('goalBut');
