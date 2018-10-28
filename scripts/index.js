@@ -22,7 +22,8 @@ document.addEventListener(`DOMContentLoaded`, () => {
           points_toward_pass: 0,
           passes: 0,
           image: 'https://placekitten.com/200/200',
-          monsters: [1,2]
+          monsters: [1,2],
+          weapons: [1,2]
         }
   const goalsData = [{
       id: 1,
@@ -139,17 +140,19 @@ function setUser (userData) {  // set the data in the user bio card
   userGold.innerHTML += userData.gold;
   userPasses.innerHTML += userData.passes;
   userMonsters.innerHTML += userData.monsters.length;
+  userWeapons.innerHTML += userData.weapons.length;
   userImg.setAttribute('src', userData.image)
 }
 
 function makeGoalCard(data) { //make the cards in the dropdown for goals
   data.forEach(x => {
+    let ids = x.tasks.map(y=> y.id);
     let item = goalsDropdown.appendChild(makeDiv(['card', 'card-body']))
     let row1 = item.appendChild(makeDiv(['row']));
     let col1 = row1.appendChild(makeDiv(['col']));
     let col2 = row1.appendChild(makeDiv(['col']));
     col1.innerHTML += `Goal: ${x.name}`;
-    col2.appendChild(makeButton('complete', x.id))
+    col2.appendChild(makeButton('complete', x.xp, ids.join(''))) //set the button's id as the word complete, the experience from the goal, and the tasks associated with the goal.
     let row2 = item.appendChild(makeDiv(['row']));
     let col3 = row2.appendChild(makeDiv(['col']));
     let col4 = row2.appendChild(makeDiv(['col']));
@@ -164,7 +167,7 @@ function makeGoalCard(data) { //make the cards in the dropdown for goals
 function addTasks(data, item) {
   data.forEach(x=> {
     item.appendChild(makeDiv(['col']))
-    .innerHTML = `<a class = 'btn btn-dark text-white' data-id=${x.gold}>${x.name}</a>`
+    .innerHTML = `<a class = 'btn btn-dark text-white' id=${x.id}and${x.gold}>${x.name}</a>`
   });
 }
 
@@ -211,9 +214,13 @@ function makeDiv(cl) { // make a div with a given class list array
   return div;
 }
 
-function makeButton(type, id) { // make a button with given type and id
+function makeButton(type, id, tasks) { // make a button with given type and id
   let button = document.createElement('button');
+  if (tasks) {
+  button.id = `${type}${id}tasks${tasks}`
+} else {
   button.id = `${type}${id}`;
+}
   button.classList.add('btn');
   button.classList.add('btn-dark');
   button.classList.add('goalBut');
