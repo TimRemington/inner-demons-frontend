@@ -93,14 +93,14 @@ document.addEventListener(`DOMContentLoaded`, () => {
   makeMonstersCard(monstersData);
 });
 
-function setUser (userData) {
+function setUser (userData) {  // set the data in the user bio card
   userName.innerText += userData.name;
   userLevel.innerHTML += userData.level;
   userXP.innerHTML += userData.xp;
   userHP.innerHTML += userData.hp;
   userGold.innerHTML += userData.gold;
   userPasses.innerHTML += userData.passes;
-} // set the data in the user bio card
+}
 
 function makeGoalCard(data) { //make the cards in the dropdown for goals
   data.forEach(x => {
@@ -118,7 +118,7 @@ function makeGoalCard(data) { //make the cards in the dropdown for goals
   });
 }
 
-function makeWeaponsCard(data) {
+function makeWeaponsCard(data) { //make the cards in the dropdown for weapons
   data.forEach(x => {
     let item = weaponsDropdown.appendChild(makeDiv(['card', 'card-body']));
     let row1 = item.appendChild(makeDiv(['row']));
@@ -130,9 +130,9 @@ function makeWeaponsCard(data) {
     <p><strong>Attack: </strong>${x.attack}</p>
     <p><strong>Chaos: </strong>${x.chaos}</p>`;
   });
-} //make the cards in the dropdown for weapons
+}
 
-function makeMonstersCard(data) {
+function makeMonstersCard(data) { //make the cards in the dropdown for monsters
   data.forEach(x => {
     let item = monstersDropdown.appendChild(makeDiv(['card', 'card-body']));
     let row1 = item.appendChild(makeDiv(['row']));
@@ -144,24 +144,24 @@ function makeMonstersCard(data) {
     <p><strong>Attack: </strong>${x.attack}</p>
     <p><strong>HP: </strong>${x.hp}</p>`;
   });
-} //make the cards in the dropdown for monsters
+}
 
-function makeImg(src) {
+function makeImg(src) {  // make an image for the weapons and monsters dropdowns
   let image = document.createElement('img');
   image.classList.add('weaponImg');
   image.setAttribute('src', src);
   return image;
-}  // make an image for the weapons and monsters dropdowns
+}
 
-function makeDiv(cl) {
+function makeDiv(cl) { // make a div with a given class list array
   let div = document.createElement('div');
   cl.forEach(x => {
     div.classList.add(x);
   });
   return div;
-} // make a div with a given class list array
+}
 
-function makeButton(type, id) {
+function makeButton(type, id) { // make a button with given type and id
   let button = document.createElement('button');
   button.id = `${type}${id}`;
   button.classList.add('btn');
@@ -169,4 +169,4 @@ function makeButton(type, id) {
   button.classList.add('goalBut');
   button.innerText = type.toUpperCase();
   return button;
-} // make a button with given type and id
+}
