@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
       description: 'He who brings suffering to the world',
       attack: 5,
       hp: 45,
-      image: 'https://placekitten.com/150/150'
+      image: 'https://placekitten.com/250/250'
     },
     {
       id: 2,
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
       description: 'Spooky horn-playing skeletal monster',
       attack: 2,
       hp: 10,
-      image: 'https://placekitten.com/150/150'
+      image: 'https://placekitten.com/250/250'
     },
     {
       id: 3,
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
       description: 'The small creature lumbers across the room, pinching at your toes.',
       attack: 1,
       hp: 5,
-      image: 'https://placekitten.com/150/150'
+      image: 'https://placekitten.com/250/250'
     },
   ];
 
@@ -38,6 +38,7 @@ function makeMonsterCard(data) {
     item.appendChild(makeDiv(['card-body', 'text-center']))
       .innerHTML = `<h5 class = 'text-center mx-auto'>${x.name}</h5>
   <p class = 'text-center mx-auto'>${x.description}</p>
+  <p class = 'text-center mx-auto'>Difficulty: ${x.attack}</p>
   <a class='btn btn-dark mx-auto text-center text-white' id=$battle{x.id}>BATTLE</a>`
   });
 }
