@@ -2,6 +2,11 @@ document.addEventListener(`DOMContentLoaded`, () => {
   const goalsDropdown = document.querySelector('#goalsDropdown');
   const weaponsDropdown = document.querySelector('#weaponsDropdown');
   const monstersDropdown = document.querySelector('#monstersDropdown');
+
+  const goalsButton = document.querySelector('#goalsButton');
+  const weaponsButton = document.querySelector('#weaponsButton');
+  const monstersButton = document.querySelector('#monstersButton');
+
   const userName = document.querySelector('#userName');
   const userLevel = document.querySelector('#userLevel');
   const userXP = document.querySelector('#userXP');
@@ -12,20 +17,6 @@ document.addEventListener(`DOMContentLoaded`, () => {
   const userGold = document.querySelector('#userGold');
   const userImg = document.querySelector('#userImg');
 
-  const userData = {
-    id: 1,
-    name: 'TimRemingtonSux',
-    level: 1,
-    gold: 10,
-    hp: 10,
-    xp: 0,
-    points_toward_pass: 0,
-    passes: 0,
-    image: 'https://placekitten.com/200/200',
-    monsters: [1, 2],
-    weapons: [1, 2],
-    goals: [1,2]
-  }
   const goalsData = [{
       id: 1,
       name: 'Lose Weight',
@@ -132,20 +123,32 @@ document.addEventListener(`DOMContentLoaded`, () => {
     }
   ];
 
-  let weaponsToUse = weaponsData.filter(x => {
-    return userData.weapons.includes(x.id)
-  });
-  let monstersToUse = monstersData.filter(x=> {
-    return userData.monsters.includes(x.id)
-  });
-  let goalsToUse = goalsData.filter(x=> {
-    return userData.goals.includes(x.id)
+  // let weaponsToUse = weaponsData.filter(x => {
+  //   return userData.weapons.includes(x.id)
+  // });
+  // let monstersToUse = monstersData.filter(x => {
+  //   return userData.monsters.includes(x.id)
+  // });
+
+  axios.get(`http://localhost:3000/users/1`).then(result => {
+    let user = result.data
+    setUser(user);
+    axios.get(`http://localhost:3000/weapons`).then(result => {
+      let weps = result.data.filter(x=> {
+        return user.weapons.includes(x.id);
+      });
+      makeWeaponsCard(weps)
+      axios.get(`http://localhost:3000/monsters`).then(result => {
+        let mons = result.data.filter(y => {
+          return user.monsters.includes(y.id);
+        });
+        makeMonstersCard(mons);
+      });
+    });
   });
 
-  setUser(userData);
-  makeGoalCard(goalsToUse);
-  makeWeaponsCard(weaponsToUse);
-  makeMonstersCard(monstersToUse);
+  // makeWeaponsCard(weaponsToUse);
+  // makeMonstersCard(monstersToUse);
 });
 
 function setUser(userData) { // set the data in the user bio card
