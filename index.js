@@ -42,9 +42,35 @@ document.addEventListener(`DOMContentLoaded`, () => {
           chaos: 1,
           image: 'https://placekitten.com/150/150'
         }]
+  const monstersData = [{
+          id: 1,
+          name: 'Matt Damon',
+          description: 'He who brings suffering to the world',
+          attack: 5,
+          hp: 45,
+          image: 'https://placekitten.com/150/150'
+        },
+        {
+          id: 2,
+          name: 'Skeleton Minion',
+          description: 'Spooky horn-playing skeletal monster',
+          attack: 2,
+          hp: 10,
+          image: 'https://placekitten.com/150/150'
+        },
+        {
+          id: 3,
+          name: 'Crab',
+          description: 'The small creature lumbers across the room, pinching at your toes.',
+          attack: 1,
+          hp: 5,
+          image: 'https://placekitten.com/150/150'
+        }];
+
 
   makeGoalCard(goalsData);
   makeWeaponsCard(weaponsData);
+  makeMonstersCard(monstersData);
 });
 
 
@@ -76,6 +102,20 @@ function makeWeaponsCard(data) {
     <p>${x.description}</p>
     <p><strong>Attack: </strong>${x.attack}</p>
     <p><strong>Chaos: </strong>${x.chaos}</p>`;
+  });
+}
+
+function makeMonstersCard(data) {
+  data.forEach(x => {
+    let item = monstersDropdown.appendChild(makeDiv(['card', 'card-body']));
+    let row1 = item.appendChild(makeDiv(['row']));
+    let col1 = row1.appendChild(makeDiv(['col']));
+    col1.appendChild(makeImg(x.image));
+    let col2 = row1.appendChild(makeDiv(['col']));
+    col2.innerHTML += `<strong>${x.name}</strong>
+    <p>${x.description}</p>
+    <p><strong>Attack: </strong>${x.attack}</p>
+    <p><strong>HP: </strong>${x.hp}</p>`;
   });
 }
 
