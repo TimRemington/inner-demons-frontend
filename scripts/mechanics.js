@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const theUser = localStorage.getItem('user');
-const url = 'http://localhost:3000';
+const url = 'https://fathomless-chamber-53771.herokuapp.com';
 
 function checkDate() { // make sure the date is today. if it's not, clear storage
   let today = new Date().getDate();

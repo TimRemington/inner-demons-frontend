@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 });
 
-const url = 'http://localhost:3000';
+const url = 'https://fathomless-chamber-53771.herokuapp.com';
 const theUser = localStorage.getItem('user');
 
 axios.get(`${url}/users/${theUser}`)

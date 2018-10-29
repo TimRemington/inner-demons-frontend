@@ -24,7 +24,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
   const userGold = document.querySelector('#userGold');
   const userImg = document.querySelector('#userImg');
 
-  const url = 'http://localhost:3000';
+  const url = 'https://fathomless-chamber-53771.herokuapp.com';
 
   axios.get(`${url}/users/${theUser}`).then(result => {
     let user = result.data

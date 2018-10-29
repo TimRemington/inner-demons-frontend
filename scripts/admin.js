@@ -28,7 +28,7 @@ function addWeapon() {
     }
     console.log('Weapon Data >>>> ', weaponData);
 
-    axios.post('http://localhost:3000/weapons', weaponData)
+    axios.post('https://fathomless-chamber-53771.herokuapp.com/weapons', weaponData)
       .then((response) => {
         location.reload()
       })
@@ -58,7 +58,7 @@ function addMonster() {
     }
     console.log('Monster Data >>>>', monsterData);
 
-    axios.post('http://localhost:3000/monsters', monsterData)
+    axios.post('https://fathomless-chamber-53771.herokuapp.com/monsters', monsterData)
       .then((response) => {
         location.reload()
       })
@@ -70,7 +70,7 @@ function addMonster() {
 }
 
 function getWeapons() {
-  axios.get('http://localhost:3000/weapons')
+  axios.get('https://fathomless-chamber-53771.herokuapp.com/weapons')
     .then((response) => {
       let update_weapon = document.getElementById('edit-weapon')
       update_weapon.style.display = "none"
@@ -139,7 +139,7 @@ function getWeapons() {
               image: image.valuue
             }
 
-            axios.patch(`http://localhost:3000/weapons/${weaponEditId}`, data)
+            axios.patch(`https://fathomless-chamber-53771.herokuapp.com/weapons/${weaponEditId}`, data)
               .then((response) => {
                 location.reload()
               })
@@ -157,7 +157,7 @@ function getWeapons() {
           console.log('id', recordId);
 
           // DELETE THIS RECORD!
-          axios.delete(`http://localhost:3000/weapons//${recordId}`)
+          axios.delete(`https://fathomless-chamber-53771.herokuapp.com/weapons//${recordId}`)
             .then((response) => {
               console.log(response)
               ev.target.parentElement.parentElement.remove()
@@ -187,7 +187,7 @@ function getWeapons() {
 }
 
 function getMonsters() {
-  axios.get('http://localhost:3000/monsters')
+  axios.get('https://fathomless-chamber-53771.herokuapp.com/monsters')
     .then((response) => {
       let update_monster = document.getElementById('edit-monster')
       update_monster.style.display = "none"
@@ -256,7 +256,7 @@ function getMonsters() {
               image: image.valuue
             }
 
-            axios.patch(`http://localhost:3000/monsters/${monsterEditId}`, data)
+            axios.patch(`https://fathomless-chamber-53771.herokuapp.com/monsters/${monsterEditId}`, data)
               .then((response) => {
                 location.reload()
               })
@@ -274,7 +274,7 @@ function getMonsters() {
           console.log('id', recordId);
 
           // DELETE THIS RECORD!
-          axios.delete(`http://localhost:3000/monsters/${recordId}`)
+          axios.delete(`https://fathomless-chamber-53771.herokuapp.com/monsters/${recordId}`)
             .then((response) => {
               console.log(response)
               ev.target.parentElement.parentElement.remove()

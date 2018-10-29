@@ -1,5 +1,5 @@
 const setHere = document.querySelector('#setHere');
-const url = 'http://localhost:3000';
+const url = 'https://fathomless-chamber-53771.herokuapp.com';
 
 // Generates a random number between 1 and the num value
 function randomNum(num) {
