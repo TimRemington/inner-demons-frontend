@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const setHere = document.querySelector('#setHere');
   const goldCounter = document.querySelector('#goldCounter');
+  let setError = document.querySelector('#errorMsg');
+  setError.style.opacity = 0;
+  setError.innerHTML = `<p class = 'text-center mx-auto pt-3'>Not enough gold, bucko!<p>`;
 
   document.addEventListener('click', event => {
     if (/buy/.test(event.target.id)) {
@@ -64,15 +67,15 @@ function makeImg(src) { // make an image
   return image;
 }
 
-function makeError(msg) {
+function makeError() {
   let setError = document.querySelector('#errorMsg');
-  setError.innerHTML = `<p class = 'text-center mx-auto pt-3'>${msg}<p>`;
   setError.classList.add('bg-danger');
+  fadeMeIn(setError);
+  setTimeout(() => fadeMeOut(setError), 2000)
 }
 
 function clearError() {
   let setError = document.querySelector('#errorMsg');
-  setError.innerHTML = '';
   setError.classList.remove('bg-danger');
 }
 
@@ -83,7 +86,7 @@ function buyItem(item) { // send request to backend
   let cost = parseInt(info[1]);
   axios.get(`http://localhost:3000/users/1`).then(result => {
     let preGold = result.data.gold;
-    if (preGold < cost) makeError('Not enough gold, bucko!');
+    if (preGold < cost) makeError();
     else {
       document.getElementById(item.id).innerText = 'BOUGHT'
       document.getElementById(item.id).id = 'x';
@@ -98,4 +101,31 @@ function buyItem(item) { // send request to backend
       });
     }
   })
+}
+
+//Fade-in function
+function fadeMeIn(item) {
+  let op = 0.01;
+  let fadeIn = setInterval(function() {
+    item.style.opacity = op;
+    op += 0.02;
+  }, 25);
+  setTimeout(() => {
+    item.style.opacity = 1;
+    clearInterval(fadeIn);
+  }, 1000);
+}
+
+//Fade-out function
+function fadeMeOut(item) {
+  let op = 1;
+  item.style.opacity = 1;
+  let fadeOut = setInterval(function() {
+    item.style.opacity = op;
+    op -= 0.02;
+  }, 25);
+  setTimeout(() => {
+    item.style.opacity = 0;
+    clearInterval(fadeOut)
+  }, 1000);
 }

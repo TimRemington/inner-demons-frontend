@@ -80,22 +80,23 @@ function addClasses(item, arr) {
 
 function startBattle(item) {
   let id = parseInt(item.id.replace(/battle/, ''));
-  // setHere.style.opacity = 0;
+  setHere.style.opacity = 0;
   setHere.innerHTML = '';
   addClasses(setHere, ['bg-dark', 'text-white', 'p-4'])
   setHere.innerHTML = `<p class = 'text-center mx-auto mt-3'>An enemy has appeared!</p>`
-  // fadeMeIn(setHere);
-  // setTimeout(() => fadeMeOut(setHere), 2000);
-  setTimeout(() => setHere.innerHTML = '', 1000);
+  fadeMeIn(setHere);
+  setTimeout(() => fadeMeOut(setHere), 2000);
+  setTimeout(() => setHere.innerHTML = '', 4000);
   axios.get(`http://localhost:3000/monsters/${id}`)
     .then(result => {
       let enemy = result.data;
       currentEnemy = enemy;
-      setTimeout(() => battlePhaseTwo(enemy), 1000);
+      setTimeout(() => battlePhaseTwo(enemy), 4000);
     })
 }
 
 function battlePhaseTwo(enemy) {
+  setHere.style.opacity = 1;
   setHere.classList.remove('row');
   setHere.innerHTML += `<h5 class = "mx-auto text-center">Choose a weapon!</h5><br>`
   axios.get(`http://localhost:3000/users/1`)
@@ -193,8 +194,8 @@ function fadeMeOut(item) {
     item.style.opacity = op;
     op -= 0.02;
   }, 25);
-  if (item.style.opacity === 0.1) {
+  setTimeout(() => {
     item.style.opacity = 0;
     clearInterval(fadeOut)
-  }
+  }, 2000);
 }

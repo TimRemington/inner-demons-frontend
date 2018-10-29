@@ -76,7 +76,7 @@ function dukeItOut(ally, weapon, monster, user) {
   let userHP = user.hp
   let monsterHP = monster.hp
 
-  while (userHP > 0 && monsterHP > 0) {
+  // while (userHP > 0 && monsterHP > 0) {
 
       monsterHP -= userAttack(ally, weapon, user, monster)
       console.log("Monster Health: ", monsterHP)
@@ -98,5 +98,10 @@ function dukeItOut(ally, weapon, monster, user) {
         return "You were killed."
       }
 
+  // }
+  if (userHP > 0 && monsterHP > 0) {
+    setTimeout(() => {
+      dukeItOut(ally, weapon, monster, user);
+    }, 2000)
   }
 }
