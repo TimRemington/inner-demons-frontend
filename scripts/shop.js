@@ -1,36 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   const setHere = document.querySelector('#setHere');
-  const weaponsData = [{
-      id: 1,
-      name: 'Disappointing Glance',
-      description: 'The look that hurts the most.',
-      attack: 2,
-      chaos: 1,
-      image: 'https://placekitten.com/300/300',
-      cost: 10
-    },
-    {
-      id: 2,
-      name: 'Shoe',
-      description: 'Just a shoe',
-      attack: 2,
-      chaos: 1,
-      image: 'https://placekitten.com/300/300',
-      cost: 10
-    },
-    {
-      id: 3,
-      name: 'Fist',
-      description: 'Your right hand curled into a ball.  Dude, find a new weapon.',
-      attack: 2,
-      chaos: 1,
-      image: 'https://placekitten.com/300/300',
-      cost: 10
-    }
-  ];
 
-  makeWeaponsCard(weaponsData);
 
   document.addEventListener('click', event => {
     if (/buy/.test(event.target.id)) {
@@ -38,6 +9,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 });
+
+axios.get(`http://localhost:3000/users/1`)
+  .then(result => {
+    let userWeapons = result.data.weapons;
+    axios.get(`http://localhost:3000/weapons`)
+    .then(result => {
+      let allWeaps = result.data.map(x => x.id);
+      let weapsToGen = allWeaps.filter(y => {
+        return !userWeapons.includes(y)
+      });
+      Promise.all(weapsToGen.map(z => {
+        return axios.get(`http://localhost:3000/weapons/${z}`)
+      }))
+      .then(result => {
+        let weaponsData = result.map(i => i.data)
+        makeWeaponsCard(weaponsData);
+      });
+    });
+  });
 
 function makeWeaponsCard(data) {
   data.forEach(x => {
