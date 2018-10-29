@@ -123,7 +123,7 @@ function battlePhaseTwo(enemy) {
 function battlePhaseThree() {
   setHere.innerHTML = '';
   setHere.innerHTML = `<h5 class = "mx-auto text-center">Choose an ally!</h5><br>`
-  axios.get(`${url}/users/1`)
+  axios.get(`${url}/users/${theUser}`)
     .then(result => {
       let monsToUse = result.data.monsters;
       Promise.all(monsToUse.map(x => {

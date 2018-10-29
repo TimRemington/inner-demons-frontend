@@ -90,6 +90,7 @@ function getWeapons() {
         let attack = document.createElement('td')
         let chaos = document.createElement('td')
         let image = document.createElement('td')
+        let cost = document.createElement('td')
         let edit_td = document.createElement('td')
         let edit_button = document.createElement('button')
         let del_td = document.createElement('td')
@@ -100,9 +101,10 @@ function getWeapons() {
         attack.innerText = weapon.attack
         chaos.innerText = weapon.chaos
         image.innerText = weapon.image
+        cost.innerText = weapon.cost
 
         edit_button.innerText = "Edit Weapon"
-        edit_button.setAttribute('weapopn-edit-id', weapon.id)
+        edit_button.setAttribute('weapon-edit-id', weapon.id)
         edit_button.addEventListener('click', (ev) => {
           ev.preventDefault()
           let weaponEditId = ev.target.getAttribute('weapon-edit-id')
@@ -118,6 +120,8 @@ function getWeapons() {
           let attack = document.getElementById('edit-weapon-attack')
           let chaos = document.getElementById('edit-weapon-chaos')
           let image = document.getElementById('edit-weapon-image')
+          let cost = document.getElementById('edit-weapon-cost')
+
 
           //fill all text areas with the value of each key from the table when update is clicked
           name.value = weapon.name
@@ -125,6 +129,7 @@ function getWeapons() {
           attack.value = weapon.attack
           chaos.value = weapon.chaos
           image.value = weapon.image
+          cost.value = weapon.cost
 
           let submit_edit = document.getElementById('submit-edit-weapon')
           //add event listener to update the row on click
@@ -136,7 +141,8 @@ function getWeapons() {
               description: description.value,
               attack: attack.value,
               chaos: chaos.value,
-              image: image.valuue
+              image: image.value
+              cost: cost.value
             }
 
             axios.patch(`https://fathomless-chamber-53771.herokuapp.com/weapons/${weaponEditId}`, data)
@@ -175,6 +181,7 @@ function getWeapons() {
         tr.appendChild(attack)
         tr.appendChild(chaos)
         tr.appendChild(image)
+        tr.appendChild(cost)
         tr.appendChild(edit_td)
         tr.appendChild(del_td)
         tbody.appendChild(tr)
