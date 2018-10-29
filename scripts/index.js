@@ -17,112 +17,6 @@ document.addEventListener(`DOMContentLoaded`, () => {
   const userGold = document.querySelector('#userGold');
   const userImg = document.querySelector('#userImg');
 
-  const goalsData = [{
-      id: 1,
-      name: 'Lose Weight',
-      xp: 200,
-      tasks: [{
-          id: 1,
-          name: 'Work out every day',
-          description: 'Go to the gym and do things.',
-          gold: 10
-        },
-        {
-          id: 2,
-          name: 'Diet',
-          description: 'Stick to your diet for the day.',
-          gold: 10
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Learn to Play Guitar',
-      xp: 100,
-      tasks: [{
-          id: 3,
-          name: 'Practice',
-          description: 'Practice your instrument.',
-          gold: 10
-        },
-        {
-          id: 4,
-          name: 'Learn Something New',
-          description: 'Learn a thing.',
-          gold: 10
-        }
-      ]
-    },
-    {
-      id: 3,
-      name: 'Learn a Language',
-      xp: 100,
-      tasks: [{
-          id: 5,
-          name: 'Practice',
-          description: 'Find 20 minutes and practice.',
-          gold: 10
-        },
-        {
-          id: 6,
-          name: 'Learn something new',
-          description: 'Learn a new word or phrase.',
-          gold: 10
-        }
-      ]
-    }
-  ]
-  const weaponsData = [{
-      id: 1,
-      name: 'Disappointing Glance',
-      description: 'The look that hurts the most.',
-      attack: 2,
-      chaos: 1,
-      image: 'https://placekitten.com/150/150'
-    },
-    {
-      id: 2,
-      name: 'Shoe',
-      description: 'Just a shoe',
-      attack: 2,
-      chaos: 1,
-      image: 'https://placekitten.com/150/150'
-    },
-    {
-      id: 3,
-      name: 'Fist',
-      description: 'Your right hand curled into a ball.  Dude, find a new weapon.',
-      attack: 2,
-      chaos: 1,
-      image: 'https://placekitten.com/150/150'
-    }
-  ]
-  const monstersData = [{
-      id: 1,
-      name: 'Matt Damon',
-      description: 'He who brings suffering to the world',
-      attack: 5,
-      hp: 45,
-      image: 'https://placekitten.com/150/150'
-    },
-    {
-      id: 2,
-      name: 'Skeleton Minion',
-      description: 'Spooky horn-playing skeletal monster',
-      attack: 2,
-      hp: 10,
-      image: 'https://placekitten.com/150/150'
-    },
-    {
-      id: 3,
-      name: 'Crab',
-      description: 'The small creature lumbers across the room, pinching at your toes.',
-      attack: 1,
-      hp: 5,
-      image: 'https://placekitten.com/150/150'
-    }
-  ];
-
   // let weaponsToUse = weaponsData.filter(x => {
   //   return userData.weapons.includes(x.id)
   // });
@@ -134,7 +28,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
     let user = result.data
     setUser(user);
     axios.get(`http://localhost:3000/weapons`).then(result => {
-      let weps = result.data.filter(x=> {
+      let weps = result.data.filter(x => {
         return user.weapons.includes(x.id);
       });
       makeWeaponsCard(weps)
@@ -143,6 +37,18 @@ document.addEventListener(`DOMContentLoaded`, () => {
           return user.monsters.includes(y.id);
         });
         makeMonstersCard(mons);
+        Promise.all(user.goals.map(a => axios.get(`http://localhost:3000/goals/${a}`)))
+          .then(result => {
+            let theGoals = result.map(b => b.data)
+            theGoals.forEach(i => {
+              Promise.all(i.tasks.map(x=> axios.get(`http://localhost:3000/tasks/${x}`)))
+              .then(result => {
+                let theTasks = result.map(y=>y.data)
+                i.tasks = theTasks
+                makeGoalCard([i])
+              })
+            })
+          })
       });
     });
   });
