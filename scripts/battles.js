@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const setHere = document.querySelector('#setHere');
 
+  let currentWeapon;
+  let currentEnemy;
+  let currentAlly;
+
   axios.get(`http://localhost:3000/users/1`)
     .then(result => {
       let userMonsters = result.data.monsters;
@@ -24,6 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', event => {
     if (/battle/.test(event.target.id)) {
       startBattle(event.target);
+    } else if (/weapon/.test(event.target.id)) {
+      chooseWeapon(event.target);
+      battlePhaseThree();
+    } else if (/monster/.test(event.target.id)) {
+      chooseMonster(event.target);
     }
   });
 
@@ -65,13 +74,88 @@ function addClasses(item, arr){
 
 function startBattle(item) {
   let id = parseInt(item.id.replace(/battle/, ''));
-  setHere.style.opacity = 0;
+  // setHere.style.opacity = 0;
   setHere.innerHTML = '';
   addClasses(setHere, ['bg-dark', 'text-white', 'p-4'])
   setHere.innerHTML = `<p class = 'text-center mx-auto mt-3'>An enemy has appeared!</p>`
-  fadeMeIn(setHere);
-  setTimeout(() => fadeMeOut(setHere), 2000);
-  setTimeout(() => setHere.innerHTML = '', 4000);
+  // fadeMeIn(setHere);
+  // setTimeout(() => fadeMeOut(setHere), 2000);
+  setTimeout(() => setHere.innerHTML = '', 1000);
+  axios.get(`http://localhost:3000/monsters/${id}`)
+  .then(result => {
+    let enemy = result.data;
+    currentEnemy = enemy;
+    setTimeout(() => battlePhaseTwo(enemy), 1000);
+  })
+}
+
+function battlePhaseTwo(enemy) {
+  setHere.classList.remove('row');
+  setHere.innerHTML += `<h5 class = "mx-auto text-center">Choose a weapon!</h5><br>`
+  axios.get(`http://localhost:3000/users/1`)
+  .then(result => {
+    let wepsToUse = result.data.weapons;
+    Promise.all(wepsToUse.map(x => {
+      return axios.get(`http://localhost:3000/weapons/${x}`)
+    }))
+    .then(result => {
+      let weapons = result.map(y => y.data);
+      showWeapons(weapons);
+    });
+  });
+}
+
+function battlePhaseThree() {
+  setHere.innerHTML = '';
+  setHere.innerHTML = `<h5 class = "mx-auto text-center">Choose an ally!</h5><br>`
+  axios.get(`http://localhost:3000/users/1`)
+  .then(result => {
+    let monsToUse = result.data.monsters;
+    Promise.all(monsToUse.map(x => {
+      return axios.get(`http://localhost:3000/monsters/${x}`)
+    }))
+    .then(result => {
+      let monsters = result.map(y => y.data);
+      showMonsters(monsters);
+    });
+  });
+}
+
+function battlePhaseFour() {
+  setHere.innerHTML = '';
+  console.log('Ready to fight!');
+}
+
+function showMonsters(arr) {
+  arr.forEach(monster => {
+    setHere.innerHTML += `<button class='btn btn-dark' id=monster${monster.id}>${monster.name} | Attack: ${monster.attack} | HP: ${monster.hp}</button>`
+    setHere.innerHTML += '<br>'
+  });
+}
+
+function showWeapons(arr) {
+  console.log(arr);
+  arr.forEach(weapon => {
+    setHere.innerHTML += `<button class='btn btn-dark' id=weapon${weapon.id}>${weapon.name} | Attack: ${weapon.attack} | Chaos: ${weapon.chaos}</button>`
+    setHere.innerHTML += '<br>'
+  });
+}
+
+function chooseWeapon(item) {
+  let weaponId = item.id.replace(/weapon/, '');
+  axios.get(`http://localhost:3000/weapons/${weaponId}`)
+  .then(result => {
+    currentWeapon = result.data;
+  });
+}
+
+function chooseMonster(item) {
+  let monsterId = item.id.replace(/monster/, '');
+  axios.get(`http://localhost:3000/monsters/${monsterId}`)
+  .then(result => {
+    currentAlly = result.data;
+    battlePhaseFour();
+  });
 }
 
 //Fade-in function

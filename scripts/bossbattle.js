@@ -1,3 +1,5 @@
+const setHere = document.querySelector('#setHere');
+
 // Generates a random number between 1 and the num value
 function randomNum(num) {
   return Math.floor(Math.random() * num) + 1
