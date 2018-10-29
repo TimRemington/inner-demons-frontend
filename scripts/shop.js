@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   const setHere = document.querySelector('#setHere');
-
+  const goldCounter = document.querySelector('#goldCounter');
 
   document.addEventListener('click', event => {
     if (/buy/.test(event.target.id)) {
@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 axios.get(`http://localhost:3000/users/1`)
   .then(result => {
     let userWeapons = result.data.weapons;
+    goldCounter.innerText = `Your Gold: ${result.data.gold}`
     axios.get(`http://localhost:3000/weapons`)
     .then(result => {
       let allWeaps = result.data.map(x => x.id);
@@ -89,6 +90,7 @@ function buyItem(item) { // send request to backend
       item.classList.remove('btn-dark');
       item.classList.add('btn-primary');
       let newGold = preGold - cost;
+      goldCounter.innerText = `Your Gold: ${newGold}`
       axios.patch(`http://localhost:3000/users/1`, {gold: newGold});
       axios.post(`http://localhost:3000/weapons_users`, {user_id: 1, weapon_id: id})
       .then(result => {
