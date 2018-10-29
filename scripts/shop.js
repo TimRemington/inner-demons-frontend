@@ -40,7 +40,7 @@ function makeWeaponsCard(data) {
   <p class = 'text-center mx-auto'>Attack: ${x.attack}</p>
   <p class = 'text-center mx-auto'>Chaos: ${x.chaos}</p>
   <p class = 'text-center mx-auto'>Cost: ${x.cost} Gold</p>
-  <a class='btn btn-dark mx-auto text-center text-white' id=buy${x.id}>BUY</a>`
+  <a class='btn btn-dark mx-auto text-center text-white' id=buy${x.id}cost${x.cost}>BUY</a>`
   });
 }
 
@@ -59,11 +59,37 @@ function makeImg(src) { // make an image
   return image;
 }
 
+function makeError(msg) {
+  let setError = document.querySelector('#errorMsg');
+  setError.innerHTML = `<p class = 'text-center mx-auto pt-3'>${msg}<p>`;
+  setError.classList.add('bg-danger');
+}
+
+function clearError() {
+  let setError = document.querySelector('#errorMsg');
+  setError.innerHTML = '';
+  setError.classList.remove('bg-danger');
+}
+
 function buyItem(item) { // send request to backend
-  let id = parseInt(item.id.replace(/buy/, ''));
-  // axios.patch(`url/${userId}`, {weapon: id});
-  document.getElementById(item.id).innerText = 'BOUGHT'
-  document.getElementById(item.id).id = 'x';
-  item.classList.remove('btn-dark');
-  item.classList.add('btn-primary');
+  clearError();
+  let info = item.id.replace(/buy/, '').split('cost');
+  let id = parseInt(info[0]);
+  let cost = parseInt(info[1]);
+  axios.get(`http://localhost:3000/users/1`).then(result => {
+    let preGold = result.data.gold;
+    if (preGold < cost) makeError('Not enough gold, bucko!');
+    else {
+      document.getElementById(item.id).innerText = 'BOUGHT'
+      document.getElementById(item.id).id = 'x';
+      item.classList.remove('btn-dark');
+      item.classList.add('btn-primary');
+      let newGold = preGold - cost;
+      axios.patch(`http://localhost:3000/users/1`, {gold: newGold});
+      axios.post(`http://localhost:3000/weapons_users`, {user_id: 1, weapon_id: id})
+      .then(result => {
+        console.log(result);
+      });
+    }
+  })
 }

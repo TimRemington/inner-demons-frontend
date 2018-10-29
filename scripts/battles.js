@@ -1,33 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   const setHere = document.querySelector('#setHere');
-  const monstersData = [{
-      id: 1,
-      name: 'Matt Damon',
-      description: 'He who brings suffering to the world',
-      attack: 5,
-      hp: 45,
-      image: 'https://placekitten.com/250/250'
-    },
-    {
-      id: 2,
-      name: 'Skeleton Minion',
-      description: 'Spooky horn-playing skeletal monster',
-      attack: 2,
-      hp: 10,
-      image: 'https://placekitten.com/250/250'
-    },
-    {
-      id: 3,
-      name: 'Crab',
-      description: 'The small creature lumbers across the room, pinching at your toes.',
-      attack: 1,
-      hp: 5,
-      image: 'https://placekitten.com/250/250'
-    },
-  ];
 
-  makeMonsterCard(monstersData)
+  axios.get(`http://localhost:3000/users/1`)
+    .then(result => {
+      let userMonsters = result.data.monsters;
+      axios.get(`http://localhost:3000/monsters`)
+      .then(result => {
+        let allMons = result.data.map(x => x.id);
+        let monsToGen = allMons.filter(y => {
+          return !userMonsters.includes(y)
+        });
+        Promise.all(monsToGen.map(z => {
+          return axios.get(`http://localhost:3000/monsters/${z}`)
+        }))
+        .then(result => {
+          let monstersData = result.map(i => i.data)
+          makeMonsterCard(monstersData);
+        });
+      });
+    });
+
+
 });
 
 function makeMonsterCard(data) {

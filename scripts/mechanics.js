@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (/and/.test(event.target.id)) {
       completeTask(event.target);
     } else if (/complete/.test(event.target.id)) {
-      // completeGoal(event.target);
       checkTasks(event.target);
     }
   });
@@ -28,17 +27,35 @@ function completeTask(item) {
   let gold = parseInt(arr[1]); // get the gold from the id
   let id = parseInt(arr[0]); // get the task's id from the button's id
   localStorage.setItem(id, true);
-  // axios.patch(`url/${userId}`, {gold: arr[1], points_toward_pass: 1});
+  axios.get(`http://localhost:3000/users/${1}`)
+  .then(result => {
+    let preGold = parseInt(result.data.gold);
+    let newGold = preGold+gold;
+    let prePass = parseInt(result.data.points_toward_pass);
+    let newPass = prePass++;
+    axios.patch(`http://localhost:3000/users/${1}`, {gold: newGold, points_toward_pass: newPass})
+    .then(result => {
+      console.log(result);
+    });
+  })
+
 }
 
 function completeGoal(item) {
-  console.log('completed');
   item.classList.remove('btn-dark');
   item.classList.add('btn-primary');
   localStorage.setItem(item.id, true);
   let nums = item.id.replace(/complete/, ''); // remove the word complete from the id
   let xp = parseInt(nums.split('tasks')[0]); // get the experience from the id
-  // axios.patch(`url/${userId}`, {experience: xp});
+  axios.get(`http://localhost:3000/users/${1}`)
+  .then(result => {
+    let preXp = parseInt(result.data.xp);
+    let newXp = result.data.xp+xp
+    axios.patch(`http://localhost:3000/users/${1}`, {xp: newXp})
+    .then(result => {
+      console.log(result);
+    });
+  });
 }
 
 function checkTasks(item) {

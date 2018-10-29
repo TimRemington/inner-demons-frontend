@@ -17,13 +17,6 @@ document.addEventListener(`DOMContentLoaded`, () => {
   const userGold = document.querySelector('#userGold');
   const userImg = document.querySelector('#userImg');
 
-  // let weaponsToUse = weaponsData.filter(x => {
-  //   return userData.weapons.includes(x.id)
-  // });
-  // let monstersToUse = monstersData.filter(x => {
-  //   return userData.monsters.includes(x.id)
-  // });
-
   axios.get(`http://localhost:3000/users/1`).then(result => {
     let user = result.data
     setUser(user);
@@ -53,8 +46,6 @@ document.addEventListener(`DOMContentLoaded`, () => {
     });
   });
 
-  // makeWeaponsCard(weaponsToUse);
-  // makeMonstersCard(monstersToUse);
 });
 
 function setUser(userData) { // set the data in the user bio card
