@@ -141,7 +141,7 @@ function getWeapons() {
               description: description.value,
               attack: attack.value,
               chaos: chaos.value,
-              image: image.value
+              image: image.value,
               cost: cost.value
             }
 

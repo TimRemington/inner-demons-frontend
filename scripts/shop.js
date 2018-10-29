@@ -93,6 +93,7 @@ function buyItem(item) { // send request to backend
   let id = parseInt(info[0]);
   let cost = parseInt(info[1]);
   axios.get(`${url}/users/${theUser}`).then(result => {
+    console.log(result.data.gold);
     let preGold = result.data.gold;
     if (preGold < cost) makeError();
     else {

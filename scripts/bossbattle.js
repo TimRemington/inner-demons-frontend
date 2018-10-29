@@ -98,6 +98,8 @@ function dukeItOut(ally, weapon, monster, user) {
         console.log("You were killed.")
         return "You were killed."
       }
+    monster.hp = monsterHP;
+    user.hp = userHP;
 
   // }
   if (userHP > 0 && monsterHP > 0) {
