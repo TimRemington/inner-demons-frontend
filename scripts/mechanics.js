@@ -23,21 +23,28 @@ function checkDate() { // make sure the date is today. if it's not, clear storag
 }
 
 function completeTask(item) {
-  item.classList.remove('btn-dark');
-  item.classList.add('btn-primary');
   let arr = item.id.split('and'); // remove the word and from the id
   let gold = parseInt(arr[1]); // get the gold from the id
   let id = parseInt(arr[0]); // get the task's id from the button's id
+  if (localStorage.getItem(id)) return;
+  item.classList.remove('btn-dark');
+  item.classList.add('btn-primary');
   localStorage.setItem(id, true);
   axios.get(`http://localhost:3000/users/${1}`)
   .then(result => {
+    console.log(result.data);
+    let passes = parseInt(result.data.passes);
     let preGold = parseInt(result.data.gold);
     let newGold = preGold+gold;
     let prePass = parseInt(result.data.points_toward_pass);
-    let newPass = prePass++;
+    let newPass = prePass+1;
+    console.log(prePass, newPass);
     axios.patch(`http://localhost:3000/users/${1}`, {gold: newGold, points_toward_pass: newPass})
     .then(result => {
-      console.log(result);
+      if (result.data.points_toward_pass == 5) {
+        passes++;
+        axios.patch(`http://localhost:3000/users/${1}`, {points_toward_pass: 0, passes: passes})
+      }
     });
   })
 
@@ -69,11 +76,15 @@ function completeGoal(item) {
   let xp = parseInt(nums.split('tasks')[0]); // get the experience from the id
   axios.get(`http://localhost:3000/users/${1}`)
   .then(result => {
+    let level = parseInt(result.data.level)
     let preXp = parseInt(result.data.xp);
     let newXp = result.data.xp+xp
     axios.patch(`http://localhost:3000/users/${1}`, {xp: newXp})
     .then(result => {
-      console.log(result);
+      if (result.data.xp == 1000){
+        level++;
+        axios.patch(`http://localhost:3000/users/${1}`, {xp: 0, level: level})
+      }
     });
   });
 }

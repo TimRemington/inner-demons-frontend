@@ -19,6 +19,9 @@ axios.get(`http://localhost:3000/users/1`)
       let weapsToGen = allWeaps.filter(y => {
         return !userWeapons.includes(y)
       });
+      if (weapsToGen.length === 0) {
+        setHere.innerHTML = `<h3 class = 'text-center text-white'>No available weapons to buy!</h3>`
+      } else {
       Promise.all(weapsToGen.map(z => {
         return axios.get(`http://localhost:3000/weapons/${z}`)
       }))
@@ -26,6 +29,7 @@ axios.get(`http://localhost:3000/users/1`)
         let weaponsData = result.map(i => i.data)
         makeWeaponsCard(weaponsData);
       });
+    }
     });
   });
 

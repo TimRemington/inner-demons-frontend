@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
           let monsToGen = allMons.filter(y => {
             return !userMonsters.includes(y)
           });
+          if (monsToGen.length === 0) {
+            setHere.innerHTML = `<h3 class = 'text-center text-white'>No available raid bosses!</h3>`
+          } else {
           Promise.all(monsToGen.map(z => {
               return axios.get(`http://localhost:3000/monsters/${z}`)
             }))
@@ -22,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
               let monstersData = result.map(i => i.data)
               makeMonsterCard(monstersData);
             });
+          }
         });
     });
 
