@@ -1,15 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   const setHere = document.querySelector('#setHere');
+  const url = 'http://localhost:3000';
 
   let currentWeapon;
   let currentEnemy;
   let currentAlly;
 
-  axios.get(`http://localhost:3000/users/1`)
+  axios.get(`${url}/users/1`)
     .then(result => {
       let userMonsters = result.data.monsters;
-      axios.get(`http://localhost:3000/monsters`)
+      axios.get(`${url}/monsters`)
         .then(result => {
           let allMons = result.data.map(x => x.id);
           let monsToGen = allMons.filter(y => {
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setHere.innerHTML = `<h3 class = 'text-center text-white'>No available raid bosses!</h3>`
           } else {
           Promise.all(monsToGen.map(z => {
-              return axios.get(`http://localhost:3000/monsters/${z}`)
+              return axios.get(`${url}/monsters/${z}`)
             }))
             .then(result => {
               let monstersData = result.map(i => i.data)
@@ -87,7 +88,7 @@ function startBattle(item) {
   fadeMeIn(setHere);
   setTimeout(() => fadeMeOut(setHere), 2000);
   setTimeout(() => setHere.innerHTML = '', 4000);
-  axios.get(`http://localhost:3000/monsters/${id}`)
+  axios.get(`${url}/monsters/${id}`)
     .then(result => {
       let enemy = result.data;
       currentEnemy = enemy;
@@ -99,11 +100,11 @@ function battlePhaseTwo(enemy) {
   setHere.style.opacity = 1;
   setHere.classList.remove('row');
   setHere.innerHTML += `<h5 class = "mx-auto text-center">Choose a weapon!</h5><br>`
-  axios.get(`http://localhost:3000/users/1`)
+  axios.get(`${url}/users/1`)
     .then(result => {
       let wepsToUse = result.data.weapons;
       Promise.all(wepsToUse.map(x => {
-          return axios.get(`http://localhost:3000/weapons/${x}`)
+          return axios.get(`${url}/weapons/${x}`)
         }))
         .then(result => {
           let weapons = result.map(y => y.data);
@@ -115,11 +116,11 @@ function battlePhaseTwo(enemy) {
 function battlePhaseThree() {
   setHere.innerHTML = '';
   setHere.innerHTML = `<h5 class = "mx-auto text-center">Choose an ally!</h5><br>`
-  axios.get(`http://localhost:3000/users/1`)
+  axios.get(`${url}/users/1`)
     .then(result => {
       let monsToUse = result.data.monsters;
       Promise.all(monsToUse.map(x => {
-          return axios.get(`http://localhost:3000/monsters/${x}`)
+          return axios.get(`${url}/monsters/${x}`)
         }))
         .then(result => {
           let monsters = result.map(y => y.data);
@@ -129,7 +130,7 @@ function battlePhaseThree() {
 }
 
 function battlePhaseFour() {
-  axios.get(`http://localhost:3000/users/1`)
+  axios.get(`${url}/users/1`)
     .then(result => {
       let thisUser = result.data;
       setHere.innerHTML = `<h3 class='mx-auto text-center'>${thisUser.name} versus ${currentEnemy.name}</h3>`;
@@ -153,7 +154,7 @@ function showWeapons(arr) {
 
 function chooseWeapon(item) {
   let weaponId = item.id.replace(/weapon/, '');
-  axios.get(`http://localhost:3000/weapons/${weaponId}`)
+  axios.get(`${url}/weapons/${weaponId}`)
     .then(result => {
       currentWeapon = result.data;
     });
@@ -161,7 +162,7 @@ function chooseWeapon(item) {
 
 function chooseMonster(item) {
   let monsterId = item.id.replace(/monster/, '');
-  axios.get(`http://localhost:3000/monsters/${monsterId}`)
+  axios.get(`${url}/monsters/${monsterId}`)
     .then(result => {
       currentAlly = result.data;
       makeFightButton();

@@ -17,24 +17,26 @@ document.addEventListener(`DOMContentLoaded`, () => {
   const userGold = document.querySelector('#userGold');
   const userImg = document.querySelector('#userImg');
 
-  axios.get(`http://localhost:3000/users/1`).then(result => {
+  const url = 'http://localhost:3000';
+
+  axios.get(`${url}/users/1`).then(result => {
     let user = result.data
     setUser(user);
-    axios.get(`http://localhost:3000/weapons`).then(result => {
+    axios.get(`${url}/weapons`).then(result => {
       let weps = result.data.filter(x => {
         return user.weapons.includes(x.id);
       });
       makeWeaponsCard(weps)
-      axios.get(`http://localhost:3000/monsters`).then(result => {
+      axios.get(`${url}/monsters`).then(result => {
         let mons = result.data.filter(y => {
           return user.monsters.includes(y.id);
         });
         makeMonstersCard(mons);
-        Promise.all(user.goals.map(a => axios.get(`http://localhost:3000/goals/${a}`)))
+        Promise.all(user.goals.map(a => axios.get(`${url}/goals/${a}`)))
           .then(result => {
             let theGoals = result.map(b => b.data)
             theGoals.forEach(i => {
-              Promise.all(i.tasks.map(x => axios.get(`http://localhost:3000/tasks/${x}`)))
+              Promise.all(i.tasks.map(x => axios.get(`${url}/tasks/${x}`)))
                 .then(result => {
                   let theTasks = result.map(y => y.data)
                   i.tasks = theTasks

@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+const url = 'http://localhost:3000';
+
 function checkDate() { // make sure the date is today. if it's not, clear storage
   let today = new Date().getDate();
   if (parseInt(localStorage.getItem('date')) !== today) {
@@ -30,7 +32,7 @@ function completeTask(item) {
   item.classList.remove('btn-dark');
   item.classList.add('btn-primary');
   localStorage.setItem(id, true);
-  axios.get(`http://localhost:3000/users/${1}`)
+  axios.get(`${url}/users/${1}`)
   .then(result => {
     console.log(result.data);
     let passes = parseInt(result.data.passes);
@@ -39,11 +41,11 @@ function completeTask(item) {
     let prePass = parseInt(result.data.points_toward_pass);
     let newPass = prePass+1;
     console.log(prePass, newPass);
-    axios.patch(`http://localhost:3000/users/${1}`, {gold: newGold, points_toward_pass: newPass})
+    axios.patch(`${url}/users/${1}`, {gold: newGold, points_toward_pass: newPass})
     .then(result => {
       if (result.data.points_toward_pass == 5) {
         passes++;
-        axios.patch(`http://localhost:3000/users/${1}`, {points_toward_pass: 0, passes: passes})
+        axios.patch(`${url}/users/${1}`, {points_toward_pass: 0, passes: passes})
       }
     });
   })
@@ -52,13 +54,13 @@ function completeTask(item) {
 
 function removeGoal(item) {
   let id = item.id.replace(/remove/, '')
-  axios.get(`http://localhost:3000/goals_users`)
+  axios.get(`${url}/goals_users`)
   .then(result => {
     let goalToRemove = result.data.filter(x => {
       return x.user_id === 1 && x.goal_id == id
     });
     let idToRemove = goalToRemove[0].id;
-    axios.delete(`http://localhost:3000/goals_users/${idToRemove}`)
+    axios.delete(`${url}/goals_users/${idToRemove}`)
     .then(result => {
       item.classList.remove('btn-dark');
       item.classList.add('btn-danger');
@@ -74,16 +76,16 @@ function completeGoal(item) {
   localStorage.setItem(item.id, true);
   let nums = item.id.replace(/complete/, ''); // remove the word complete from the id
   let xp = parseInt(nums.split('tasks')[0]); // get the experience from the id
-  axios.get(`http://localhost:3000/users/${1}`)
+  axios.get(`${url}/users/${1}`)
   .then(result => {
     let level = parseInt(result.data.level)
     let preXp = parseInt(result.data.xp);
     let newXp = result.data.xp+xp
-    axios.patch(`http://localhost:3000/users/${1}`, {xp: newXp})
+    axios.patch(`${url}/users/${1}`, {xp: newXp})
     .then(result => {
       if (result.data.xp == 1000){
         level++;
-        axios.patch(`http://localhost:3000/users/${1}`, {xp: 0, level: level})
+        axios.patch(`${url}/users/${1}`, {xp: 0, level: level})
       }
     });
   });

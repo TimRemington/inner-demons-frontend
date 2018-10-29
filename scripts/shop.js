@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const setHere = document.querySelector('#setHere');
   const goldCounter = document.querySelector('#goldCounter');
+
   let setError = document.querySelector('#errorMsg');
   setError.style.opacity = 0;
   setError.innerHTML = `<p class = 'text-center mx-auto pt-3'>Not enough gold, bucko!<p>`;
@@ -13,11 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 });
 
-axios.get(`http://localhost:3000/users/1`)
+const url = 'http://localhost:3000';
+
+axios.get(`${url}/users/1`)
   .then(result => {
     let userWeapons = result.data.weapons;
     goldCounter.innerText = `Your Gold: ${result.data.gold}`
-    axios.get(`http://localhost:3000/weapons`)
+    axios.get(`${url}/weapons`)
     .then(result => {
       let allWeaps = result.data.map(x => x.id);
       let weapsToGen = allWeaps.filter(y => {
@@ -27,7 +30,7 @@ axios.get(`http://localhost:3000/users/1`)
         setHere.innerHTML = `<h3 class = 'text-center text-white'>No available weapons to buy!</h3>`
       } else {
       Promise.all(weapsToGen.map(z => {
-        return axios.get(`http://localhost:3000/weapons/${z}`)
+        return axios.get(`${url}/weapons/${z}`)
       }))
       .then(result => {
         let weaponsData = result.map(i => i.data)
@@ -84,7 +87,7 @@ function buyItem(item) { // send request to backend
   let info = item.id.replace(/buy/, '').split('cost');
   let id = parseInt(info[0]);
   let cost = parseInt(info[1]);
-  axios.get(`http://localhost:3000/users/1`).then(result => {
+  axios.get(`${url}/users/1`).then(result => {
     let preGold = result.data.gold;
     if (preGold < cost) makeError();
     else {
@@ -94,8 +97,8 @@ function buyItem(item) { // send request to backend
       item.classList.add('btn-primary');
       let newGold = preGold - cost;
       goldCounter.innerText = `Your Gold: ${newGold}`
-      axios.patch(`http://localhost:3000/users/1`, {gold: newGold});
-      axios.post(`http://localhost:3000/weapons_users`, {user_id: 1, weapon_id: id})
+      axios.patch(`${url}/users/1`, {gold: newGold});
+      axios.post(`${url}/weapons_users`, {user_id: 1, weapon_id: id})
       .then(result => {
         console.log(result);
       });

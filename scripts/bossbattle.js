@@ -1,4 +1,5 @@
 const setHere = document.querySelector('#setHere');
+const url = 'http://localhost:3000';
 
 // Generates a random number between 1 and the num value
 function randomNum(num) {
@@ -83,7 +84,7 @@ function dukeItOut(ally, weapon, monster, user) {
       if (monsterHP <= 0) {
         setHere.innerHTML += `<br>You slayed ${monster.name} with a ${weapon.name}!`
         console.log(`You slayed the monster with a ${weapon.name}!`)
-        axios.post(`http://localhost:3000/monsters_users`, {user_id: 1, monster_id: monster.id})
+        axios.post(`${url}/monsters_users`, {user_id: 1, monster_id: monster.id})
         .then(result => {
           console.log(result);
         })
