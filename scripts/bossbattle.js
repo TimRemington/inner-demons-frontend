@@ -6,14 +6,15 @@ function randomNum(num) {
 }
 
 // Gives the amount of damage the user deals
-function userAttack(ally, weapon, user) {
+function userAttack(ally, weapon, user, enemy) {
   let attackValue = ally.attack + weapon.attack
   let damage = 0
 
   damage += calcDamage(attackValue)
   damage += criticalWeapon(damage, weapon)
-  damage += criticalAlly(damage, ally.attack, user.level)
+  damage += criticalAlly(damage, ally.attack, user.level, ally.name)
 
+  setHere.innerHTML += `<br>You struck ${enemy.name} for ${damage} damage!`
   console.log("You hit for: ", damage)
   return damage
 }
@@ -24,6 +25,8 @@ function monsterAttack(monster) {
 
   damage += calcDamage(monster.attack)
   damage += criticalWeapon(damage, monster.attack)
+
+  setHere.innerHTML += `<br>${monster.name} hit for ${damage} damage!`
 
   console.log("Monster hit for: ", damage)
   return damage
@@ -46,6 +49,7 @@ function criticalWeapon(damage, weapon) {
   let critSuccess = Math.random().toFixed(2)
 
   if (critSuccess <= critChance) {
+    setHere.innerHTML += `<br>The Gods smile upon you, critical hit!`
     console.log('The Gods smile upon you, critical hit!')
     return damage
   } else {
@@ -54,14 +58,45 @@ function criticalWeapon(damage, weapon) {
 }
 
 // When an ally crit is scored, add level to damage
-function criticalAlly(damage, ally, level) {
+function criticalAlly(damage, ally, level, name) {
   let critChance = ally * .01
   let critSuccess = Math.random().toFixed(2)
 
   if (critSuccess <= critChance) {
-    console.log(`Your ${ally.name} torn into your opponent, scoring a critical hit!`)
+    setHere.innerHTML += `<br>Your ${name} tore into your opponent, scoring a critical hit!`
+    console.log(`Your ${name} tore into your opponent, scoring a critical hit!`)
     return level
   } else {
     return 0
+  }
+}
+
+// A back and forth attack function til a winner is determined
+function dukeItOut(ally, weapon, monster, user) {
+  let userHP = user.hp
+  let monsterHP = monster.hp
+
+  while (userHP > 0 && monsterHP > 0) {
+
+      monsterHP -= userAttack(ally, weapon, user, monster)
+      console.log("Monster Health: ", monsterHP)
+      if (monsterHP <= 0) {
+        setHere.innerHTML += `<br>You slayed ${monster.name} with a ${weapon.name}!`
+        console.log(`You slayed the monster with a ${weapon.name}!`)
+        axios.post(`http://localhost:3000/monsters_users`, {user_id: 1, monster_id: monster.id})
+        .then(result => {
+          console.log(result);
+        })
+        return `You slayed the monster with a ${weapon.name}!`
+      }
+
+      userHP -= monsterAttack(monster)
+      console.log("User Health: ", userHP)
+      if (userHP <= 0) {
+        setHere.innerHTML += `<br>You were killed by ${monster.name}!`
+        console.log("You were killed.")
+        return "You were killed."
+      }
+
   }
 }
