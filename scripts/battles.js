@@ -1,29 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   const setHere = document.querySelector('#setHere');
+  const url = 'http://localhost:3000';
 
-  axios.get(`http://localhost:3000/users/1`)
+  let currentWeapon;
+  let currentEnemy;
+  let currentAlly;
+
+  axios.get(`${url}/users/1`)
     .then(result => {
       let userMonsters = result.data.monsters;
-      axios.get(`http://localhost:3000/monsters`)
-      .then(result => {
-        let allMons = result.data.map(x => x.id);
-        let monsToGen = allMons.filter(y => {
-          return !userMonsters.includes(y)
-        });
-        Promise.all(monsToGen.map(z => {
-          return axios.get(`http://localhost:3000/monsters/${z}`)
-        }))
+      axios.get(`${url}/monsters`)
         .then(result => {
-          let monstersData = result.map(i => i.data)
-          makeMonsterCard(monstersData);
+          let allMons = result.data.map(x => x.id);
+          let monsToGen = allMons.filter(y => {
+            return !userMonsters.includes(y)
+          });
+          if (monsToGen.length === 0) {
+            setHere.innerHTML = `<h3 class = 'text-center text-white'>No available raid bosses!</h3>`
+          } else {
+          Promise.all(monsToGen.map(z => {
+              return axios.get(`${url}/monsters/${z}`)
+            }))
+            .then(result => {
+              let monstersData = result.map(i => i.data)
+              makeMonsterCard(monstersData);
+            });
+          }
         });
-      });
     });
 
   document.addEventListener('click', event => {
     if (/battle/.test(event.target.id)) {
       startBattle(event.target);
+    } else if (/weapon/.test(event.target.id)) {
+      chooseWeapon(event.target);
+      battlePhaseThree();
+    } else if (/monster/.test(event.target.id)) {
+      chooseMonster(event.target);
+    } else if (/fight/.test(event.target.id)) {
+      battlePhaseFour();
     }
   });
 
@@ -57,7 +73,7 @@ function makeImg(src) { // make an image
   return image;
 }
 
-function addClasses(item, arr){
+function addClasses(item, arr) {
   arr.forEach(x => {
     item.classList.add(x);
   });
@@ -72,6 +88,90 @@ function startBattle(item) {
   fadeMeIn(setHere);
   setTimeout(() => fadeMeOut(setHere), 2000);
   setTimeout(() => setHere.innerHTML = '', 4000);
+  axios.get(`${url}/monsters/${id}`)
+    .then(result => {
+      let enemy = result.data;
+      currentEnemy = enemy;
+      setTimeout(() => battlePhaseTwo(enemy), 4000);
+    })
+}
+
+function battlePhaseTwo(enemy) {
+  setHere.style.opacity = 1;
+  setHere.classList.remove('row');
+  setHere.innerHTML += `<h5 class = "mx-auto text-center">Choose a weapon!</h5><br>`
+  axios.get(`${url}/users/1`)
+    .then(result => {
+      let wepsToUse = result.data.weapons;
+      Promise.all(wepsToUse.map(x => {
+          return axios.get(`${url}/weapons/${x}`)
+        }))
+        .then(result => {
+          let weapons = result.map(y => y.data);
+          showWeapons(weapons);
+        });
+    });
+}
+
+function battlePhaseThree() {
+  setHere.innerHTML = '';
+  setHere.innerHTML = `<h5 class = "mx-auto text-center">Choose an ally!</h5><br>`
+  axios.get(`${url}/users/1`)
+    .then(result => {
+      let monsToUse = result.data.monsters;
+      Promise.all(monsToUse.map(x => {
+          return axios.get(`${url}/monsters/${x}`)
+        }))
+        .then(result => {
+          let monsters = result.map(y => y.data);
+          showMonsters(monsters);
+        });
+    });
+}
+
+function battlePhaseFour() {
+  axios.get(`${url}/users/1`)
+    .then(result => {
+      let thisUser = result.data;
+      setHere.innerHTML = `<h3 class='mx-auto text-center'>${thisUser.name} versus ${currentEnemy.name}</h3>`;
+      dukeItOut(currentAlly, currentWeapon, currentEnemy, thisUser);
+    });
+}
+
+function showMonsters(arr) {
+  arr.forEach(monster => {
+    setHere.innerHTML += `<button class='btn btn-dark' id=monster${monster.id}>${monster.name} | Attack: ${monster.attack} | HP: ${monster.hp}</button>`
+    setHere.innerHTML += '<br>'
+  });
+}
+
+function showWeapons(arr) {
+  arr.forEach(weapon => {
+    setHere.innerHTML += `<button class='btn btn-dark' id=weapon${weapon.id}>${weapon.name} | Attack: ${weapon.attack} | Chaos: ${weapon.chaos}</button>`
+    setHere.innerHTML += '<br>'
+  });
+}
+
+function chooseWeapon(item) {
+  let weaponId = item.id.replace(/weapon/, '');
+  axios.get(`${url}/weapons/${weaponId}`)
+    .then(result => {
+      currentWeapon = result.data;
+    });
+}
+
+function chooseMonster(item) {
+  let monsterId = item.id.replace(/monster/, '');
+  axios.get(`${url}/monsters/${monsterId}`)
+    .then(result => {
+      currentAlly = result.data;
+      makeFightButton();
+    });
+}
+
+function makeFightButton() {
+  addClasses(setHere, ['mx-auto', 'text-center'])
+  setHere.innerHTML = `<h3 class='btn btn-danger mx-auto text-center' id='fight'>FIGHT!</h3>`
 }
 
 //Fade-in function
@@ -95,8 +195,8 @@ function fadeMeOut(item) {
     item.style.opacity = op;
     op -= 0.02;
   }, 25);
-  if (item.style.opacity === 0.1) {
+  setTimeout(() => {
     item.style.opacity = 0;
     clearInterval(fadeOut)
-  }
+  }, 2000);
 }

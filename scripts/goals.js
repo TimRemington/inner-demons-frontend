@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   const setHere = document.querySelector('#setHere');
+  const url = 'http://localhost:3000';
 
 
-  axios.get(`http://localhost:3000/users/1`).then(result => {
+  axios.get(`${url}/users/1`).then(result => {
     let user = result.data
-    axios.get(`http://localhost:3000/goals/`)
+    axios.get(`${url}/goals/`)
       .then(result => {
         let goalsToUse = result.data.filter(b => {
           return !user.goals.includes(b.id);
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     item.id = 'x';
     item.innerText = 'ADDED!';
     console.log('Added goal number', id);
-    axios.post(`http://localhost:3000/goals_users`, {user_id: 1, goal_id: id});
+    axios.post(`${url}/goals_users`, {user_id: 1, goal_id: id});
   }
 
 

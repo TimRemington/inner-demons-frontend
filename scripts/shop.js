@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   const setHere = document.querySelector('#setHere');
+  const goldCounter = document.querySelector('#goldCounter');
 
+  let setError = document.querySelector('#errorMsg');
+  setError.style.opacity = 0;
+  setError.innerHTML = `<p class = 'text-center mx-auto pt-3'>Not enough gold, bucko!<p>`;
 
   document.addEventListener('click', event => {
     if (/buy/.test(event.target.id)) {
@@ -10,22 +14,29 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 });
 
-axios.get(`http://localhost:3000/users/1`)
+const url = 'http://localhost:3000';
+
+axios.get(`${url}/users/1`)
   .then(result => {
     let userWeapons = result.data.weapons;
-    axios.get(`http://localhost:3000/weapons`)
+    goldCounter.innerText = `Your Gold: ${result.data.gold}`
+    axios.get(`${url}/weapons`)
     .then(result => {
       let allWeaps = result.data.map(x => x.id);
       let weapsToGen = allWeaps.filter(y => {
         return !userWeapons.includes(y)
       });
+      if (weapsToGen.length === 0) {
+        setHere.innerHTML = `<h3 class = 'text-center text-white'>No available weapons to buy!</h3>`
+      } else {
       Promise.all(weapsToGen.map(z => {
-        return axios.get(`http://localhost:3000/weapons/${z}`)
+        return axios.get(`${url}/weapons/${z}`)
       }))
       .then(result => {
         let weaponsData = result.map(i => i.data)
         makeWeaponsCard(weaponsData);
       });
+    }
     });
   });
 
@@ -59,15 +70,15 @@ function makeImg(src) { // make an image
   return image;
 }
 
-function makeError(msg) {
+function makeError() {
   let setError = document.querySelector('#errorMsg');
-  setError.innerHTML = `<p class = 'text-center mx-auto pt-3'>${msg}<p>`;
   setError.classList.add('bg-danger');
+  fadeMeIn(setError);
+  setTimeout(() => fadeMeOut(setError), 2000)
 }
 
 function clearError() {
   let setError = document.querySelector('#errorMsg');
-  setError.innerHTML = '';
   setError.classList.remove('bg-danger');
 }
 
@@ -76,20 +87,48 @@ function buyItem(item) { // send request to backend
   let info = item.id.replace(/buy/, '').split('cost');
   let id = parseInt(info[0]);
   let cost = parseInt(info[1]);
-  axios.get(`http://localhost:3000/users/1`).then(result => {
+  axios.get(`${url}/users/1`).then(result => {
     let preGold = result.data.gold;
-    if (preGold < cost) makeError('Not enough gold, bucko!');
+    if (preGold < cost) makeError();
     else {
       document.getElementById(item.id).innerText = 'BOUGHT'
       document.getElementById(item.id).id = 'x';
       item.classList.remove('btn-dark');
       item.classList.add('btn-primary');
       let newGold = preGold - cost;
-      axios.patch(`http://localhost:3000/users/1`, {gold: newGold});
-      axios.post(`http://localhost:3000/weapons_users`, {user_id: 1, weapon_id: id})
+      goldCounter.innerText = `Your Gold: ${newGold}`
+      axios.patch(`${url}/users/1`, {gold: newGold});
+      axios.post(`${url}/weapons_users`, {user_id: 1, weapon_id: id})
       .then(result => {
         console.log(result);
       });
     }
   })
+}
+
+//Fade-in function
+function fadeMeIn(item) {
+  let op = 0.01;
+  let fadeIn = setInterval(function() {
+    item.style.opacity = op;
+    op += 0.02;
+  }, 25);
+  setTimeout(() => {
+    item.style.opacity = 1;
+    clearInterval(fadeIn);
+  }, 1000);
+}
+
+//Fade-out function
+function fadeMeOut(item) {
+  let op = 1;
+  item.style.opacity = 1;
+  let fadeOut = setInterval(function() {
+    item.style.opacity = op;
+    op -= 0.02;
+  }, 25);
+  setTimeout(() => {
+    item.style.opacity = 0;
+    clearInterval(fadeOut)
+  }, 1000);
 }
