@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
       completeTask(event.target);
     } else if (/complete/.test(event.target.id)) {
       checkTasks(event.target);
+    } else if (/remove/.test(event.target.id)){
+      removeGoal(event.target);
     }
   });
 
@@ -39,6 +41,24 @@ function completeTask(item) {
     });
   })
 
+}
+
+function removeGoal(item) {
+  let id = item.id.replace(/remove/, '')
+  axios.get(`http://localhost:3000/goals_users`)
+  .then(result => {
+    let goalToRemove = result.data.filter(x => {
+      return x.user_id === 1 && x.goal_id == id
+    });
+    let idToRemove = goalToRemove[0].id;
+    axios.delete(`http://localhost:3000/goals_users/${idToRemove}`)
+    .then(result => {
+      item.classList.remove('btn-dark');
+      item.classList.add('btn-danger');
+      item.innerText = 'REMOVED!';
+      item.id = 'x';
+    });
+  });
 }
 
 function completeGoal(item) {
