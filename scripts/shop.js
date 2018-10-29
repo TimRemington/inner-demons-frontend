@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  if(!localStorage.getItem('user')) {
+    location.replace('intro.html')
+  }
+
   const setHere = document.querySelector('#setHere');
   const goldCounter = document.querySelector('#goldCounter');
 
@@ -15,8 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const url = 'http://localhost:3000';
+const theUser = localStorage.getItem('user');
 
-axios.get(`${url}/users/1`)
+axios.get(`${url}/users/${theUser}`)
   .then(result => {
     let userWeapons = result.data.weapons;
     goldCounter.innerText = `Your Gold: ${result.data.gold}`
@@ -87,7 +92,7 @@ function buyItem(item) { // send request to backend
   let info = item.id.replace(/buy/, '').split('cost');
   let id = parseInt(info[0]);
   let cost = parseInt(info[1]);
-  axios.get(`${url}/users/1`).then(result => {
+  axios.get(`${url}/users/${theUser}`).then(result => {
     let preGold = result.data.gold;
     if (preGold < cost) makeError();
     else {
@@ -97,8 +102,8 @@ function buyItem(item) { // send request to backend
       item.classList.add('btn-primary');
       let newGold = preGold - cost;
       goldCounter.innerText = `Your Gold: ${newGold}`
-      axios.patch(`${url}/users/1`, {gold: newGold});
-      axios.post(`${url}/weapons_users`, {user_id: 1, weapon_id: id})
+      axios.patch(`${url}/users/${theUser}`, {gold: newGold});
+      axios.post(`${url}/weapons_users`, {user_id: theUser, weapon_id: id})
       .then(result => {
         console.log(result);
       });

@@ -1,13 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  if(!localStorage.getItem('user')) {
+    location.replace('intro.html')
+  }
+
   const setHere = document.querySelector('#setHere');
   const url = 'http://localhost:3000';
+  const theUser = localStorage.getItem('user');
 
   let currentWeapon;
   let currentEnemy;
   let currentAlly;
 
-  axios.get(`${url}/users/1`)
+  axios.get(`${url}/users/${theUser}`)
     .then(result => {
       let userMonsters = result.data.monsters;
       axios.get(`${url}/monsters`)
@@ -44,6 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+const theUser = localStorage.getItem('user');
 
 function makeMonsterCard(data) {
   data.forEach(x => {
@@ -100,7 +107,7 @@ function battlePhaseTwo(enemy) {
   setHere.style.opacity = 1;
   setHere.classList.remove('row');
   setHere.innerHTML += `<h5 class = "mx-auto text-center">Choose a weapon!</h5><br>`
-  axios.get(`${url}/users/1`)
+  axios.get(`${url}/users/${theUser}`)
     .then(result => {
       let wepsToUse = result.data.weapons;
       Promise.all(wepsToUse.map(x => {
@@ -130,7 +137,7 @@ function battlePhaseThree() {
 }
 
 function battlePhaseFour() {
-  axios.get(`${url}/users/1`)
+  axios.get(`${url}/users/${theUser}`)
     .then(result => {
       let thisUser = result.data;
       setHere.innerHTML = `<h3 class='mx-auto text-center'>${thisUser.name} versus ${currentEnemy.name}</h3>`;

@@ -1,4 +1,11 @@
 document.addEventListener(`DOMContentLoaded`, () => {
+
+  if(!localStorage.getItem('user')) {
+    location.replace('pages/intro.html')
+  }
+
+  const theUser = localStorage.getItem('user');
+
   const goalsDropdown = document.querySelector('#goalsDropdown');
   const weaponsDropdown = document.querySelector('#weaponsDropdown');
   const monstersDropdown = document.querySelector('#monstersDropdown');
@@ -19,7 +26,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
 
   const url = 'http://localhost:3000';
 
-  axios.get(`${url}/users/1`).then(result => {
+  axios.get(`${url}/users/${theUser}`).then(result => {
     let user = result.data
     setUser(user);
     axios.get(`${url}/weapons`).then(result => {
@@ -49,6 +56,9 @@ document.addEventListener(`DOMContentLoaded`, () => {
   });
 
 });
+
+const thisUser = localStorage.getItem('user'); // set the user
+
 
 function setUser(userData) { // set the data in the user bio card
   userName.innerText += userData.name;

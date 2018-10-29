@@ -1,10 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  if(!localStorage.getItem('user')) {
+    location.replace('intro.html')
+  }
+
   const setHere = document.querySelector('#setHere');
   const url = 'http://localhost:3000';
+  const theUser = localStorage.getItem('user');
 
-
-  axios.get(`${url}/users/1`).then(result => {
+  axios.get(`${url}/users/${theUser}`).then(result => {
     let user = result.data
     axios.get(`${url}/goals/`)
       .then(result => {
