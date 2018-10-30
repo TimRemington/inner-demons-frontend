@@ -1,6 +1,8 @@
 const setHere = document.querySelector('#setHere');
 const url = 'https://fathomless-chamber-53771.herokuapp.com';
 
+let attacks = ['assaulted', 'stabbed', 'struck', 'smashed', 'utterly mentally destroyed', 'insulted', 'upset', 'stood near', 'slightly wounded', 'touched', 'laughed at', 'wounded', 'praised'];
+
 // Generates a random number between 1 and the num value
 function randomNum(num) {
   return Math.floor(Math.random() * num) + 1
@@ -14,8 +16,9 @@ function userAttack(ally, weapon, user, enemy) {
   damage += calcDamage(attackValue)
   damage += criticalWeapon(damage, weapon)
   damage += criticalAlly(damage, ally.attack, user.level, ally.name)
+  let x = Math.floor(Math.random()*attacks.length);
 
-  setHere.innerHTML += `<br>You struck ${enemy.name} for ${damage} damage!`
+  setHere.innerHTML += `<br>You ${attacks[x]} ${enemy.name} for ${damage} damage!`
   console.log("You hit for: ", damage)
   return damage
 }
@@ -26,8 +29,9 @@ function monsterAttack(monster) {
 
   damage += calcDamage(monster.attack)
   damage += criticalWeapon(damage, monster.attack)
+  let x = Math.floor(Math.random()*attacks.length);
 
-  setHere.innerHTML += `<br>${monster.name} hit for ${damage} damage!`
+  setHere.innerHTML += `<br>${monster.name} ${attacks[x]} you for ${damage} damage!`
 
   console.log("Monster hit for: ", damage)
   return damage
