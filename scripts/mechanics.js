@@ -79,14 +79,16 @@ function completeGoal(item) {
   let xp = parseInt(nums.split('tasks')[0]); // get the experience from the id
   axios.get(`${url}/users/${theUser}`)
   .then(result => {
-    let level = parseInt(result.data.level)
+    let level = parseInt(result.data.level);
+    let hp = parseInt(result.data.hp);
     let preXp = parseInt(result.data.xp);
     let newXp = result.data.xp+xp
     axios.patch(`${url}/users/${theUser}`, {xp: newXp})
     .then(result => {
       if (result.data.xp == 1000){
         level++;
-        axios.patch(`${url}/users/${theUser}`, {xp: 0, level: level})
+        hp = hp + 5;
+        axios.patch(`${url}/users/${theUser}`, {xp: 0, level: level, hp: hp})
       }
     });
   });
