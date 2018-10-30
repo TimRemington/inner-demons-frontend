@@ -28,7 +28,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
 
   axios.get(`${url}/users/${theUser}`).then(result => {
     let user = result.data
-    setUser(user);
+    setTimeout(() => setUser(user), 250);
     axios.get(`${url}/weapons`).then(result => {
       let weps = result.data.filter(x => {
         return user.weapons.includes(x.id);

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  if(!localStorage.getItem('user')) {
+  if (!localStorage.getItem('user')) {
     location.replace('intro.html')
   }
 
@@ -21,29 +21,33 @@ document.addEventListener('DOMContentLoaded', () => {
 const url = 'https://fathomless-chamber-53771.herokuapp.com';
 const theUser = localStorage.getItem('user');
 
-axios.get(`${url}/users/${theUser}`)
-  .then(result => {
-    let userWeapons = result.data.weapons;
-    goldCounter.innerText = `Your Gold: ${result.data.gold}`
-    axios.get(`${url}/weapons`)
+setTimeout(setUp, 500);
+
+function setUp() {
+  axios.get(`${url}/users/${theUser}`)
     .then(result => {
-      let allWeaps = result.data.map(x => x.id);
-      let weapsToGen = allWeaps.filter(y => {
-        return !userWeapons.includes(y)
-      });
-      if (weapsToGen.length === 0) {
-        setHere.innerHTML = `<h3 class = 'text-center text-white'>No available weapons to buy!</h3>`
-      } else {
-      Promise.all(weapsToGen.map(z => {
-        return axios.get(`${url}/weapons/${z}`)
-      }))
-      .then(result => {
-        let weaponsData = result.map(i => i.data)
-        makeWeaponsCard(weaponsData);
-      });
-    }
+      let userWeapons = result.data.weapons;
+      goldCounter.innerText = `Your Gold: ${result.data.gold}`
+      axios.get(`${url}/weapons`)
+        .then(result => {
+          let allWeaps = result.data.map(x => x.id);
+          let weapsToGen = allWeaps.filter(y => {
+            return !userWeapons.includes(y)
+          });
+          if (weapsToGen.length === 0) {
+            setHere.innerHTML = `<h3 class = 'text-center text-white'>No available weapons to buy!</h3>`
+          } else {
+            Promise.all(weapsToGen.map(z => {
+                return axios.get(`${url}/weapons/${z}`)
+              }))
+              .then(result => {
+                let weaponsData = result.map(i => i.data)
+                makeWeaponsCard(weaponsData);
+              });
+          }
+        });
     });
-  });
+}
 
 function makeWeaponsCard(data) {
   data.forEach(x => {
@@ -103,11 +107,16 @@ function buyItem(item) { // send request to backend
       item.classList.add('btn-primary');
       let newGold = preGold - cost;
       goldCounter.innerText = `Your Gold: ${newGold}`
-      axios.patch(`${url}/users/${theUser}`, {gold: newGold});
-      axios.post(`${url}/weapons_users`, {user_id: theUser, weapon_id: id})
-      .then(result => {
-        console.log(result);
+      axios.patch(`${url}/users/${theUser}`, {
+        gold: newGold
       });
+      axios.post(`${url}/weapons_users`, {
+          user_id: theUser,
+          weapon_id: id
+        })
+        .then(result => {
+          console.log(result);
+        });
     }
   })
 }
